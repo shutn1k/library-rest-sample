@@ -9,11 +9,14 @@
     ```bash
     docker-compose up -d
     ```
-3. Установить composer-зависимости командой (при необходимости изменить library_rest_php см. п.1)
+3. Установить composer-зависимости командой (при необходимости изменить library_rest_php см. п.1):
      ```bash
      docker exec -it library_rest_php composer install
      ```
-
+4. Создать структуру БД командой (при необходимости изменить library_rest_php см. п.1):
+     ```bash
+     docker exec -it library_rest_php php bin/console d:m:m
+     ```
 
 
 
