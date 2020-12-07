@@ -25,4 +25,10 @@
      docker exec -it library_rest_php /bin/bash -c "for i in {1..50}; do php bin/console d:f:l -q --append; done"
      ```
 
+## Тестирование
 
+1. Скопировать файл phpunit.xml.dist в phpunit.xml изменив необходимые настройки
+2. Запуск тестов (при необходимости изменить library_rest_php см. п.1):
+     ```bash
+     docker exec -it library_rest_php php bin/phpunit
+     ```   
