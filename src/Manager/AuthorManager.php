@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\Author;
+use App\Exceptions\AuthorNotFoundException;
 use App\Exceptions\JsonDecodeException;
 use App\Exceptions\ParserException;
 use App\Parser\AuthorParser;
@@ -42,6 +43,23 @@ class AuthorManager {
 
         $this->entityManager->persist($author);
         $this->entityManager->flush();
+
+        return $author;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Author
+     * @throws AuthorNotFoundException
+     */
+    public function show(int $id): Author {
+
+        $author = $this->entityManager->getRepository(Author::class)
+            ->findOneBy(['id' => $id]);
+        if (!$author) {
+            throw new AuthorNotFoundException();
+        }
 
         return $author;
     }

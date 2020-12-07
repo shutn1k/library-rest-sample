@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Book;
+use App\Model\BookFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +21,26 @@ class BookRepository extends ServiceEntityRepository {
         parent::__construct($registry, Book::class);
     }
 
-    // /**
-    //  * @return Book[] Returns an array of Book objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    /**
+     * @param BookFilter $bookFilter
+     *
+     * @return Book[]
+     */
+    public function findByFilter(BookFilter $bookFilter): array {
 
-    /*
-    public function findOneBySomeField($value): ?Book
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $qb = $this->createQueryBuilder('b')
+            ->leftJoin('b.translations', 'bt', Expr\Join::WITH, 'bt.locale = :locale')
+            // ToDo перенести locale в фильтр
+            ->setParameter('locale', 'ru');
+
+        // Можно сделать цепочку обязанностей
+        if ($bookFilter->getName()) {
+            $qb->andWhere('bt.name LIKE :name')
+                ->setParameter('name', "%{$bookFilter->getName()}%");
+        }
+
+        $qb->setMaxResults(BookFilter::BOOK_LIMIT);
+
+        return $qb->getQuery()->getResult();
     }
-    */
 }

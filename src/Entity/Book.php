@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * Class Book
@@ -27,6 +28,7 @@ class Book implements TranslatableInterface {
     private $id;
 
     /**
+     * @MaxDepth(1)
      * @ORM\ManyToMany(targetEntity=Author::class, inversedBy="books")
      * @ORM\JoinTable(name="lr_book_author",
      *      joinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id")},
@@ -83,5 +85,13 @@ class Book implements TranslatableInterface {
         $this->authors->removeElement($author);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string {
+
+        return $this->translate($this->getCurrentLocale())->getName();
     }
 }
