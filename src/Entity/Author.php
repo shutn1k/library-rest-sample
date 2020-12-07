@@ -6,6 +6,7 @@ use App\Repository\AuthorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * Class Author
@@ -28,6 +29,7 @@ class Author {
     private $name;
 
     /**
+     * @Ignore()
      * @ORM\ManyToMany(targetEntity=Book::class, mappedBy="authors")
      */
     private $books;

@@ -1,5 +1,11 @@
+api:
+    resource: ../../src/Controller/Api/v1
+    type: annotation
+#    name_prefix: api_v1_
+#    prefix: /api/v1
+
 controllers:
-    resource: ../../src/Controller/
+    resource: ../../src/Controller/*.php
     type: annotation
 
 kernel:
