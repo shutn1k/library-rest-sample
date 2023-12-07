@@ -1,0 +1,15 @@
+api_locale:
+    resource: ../src/Controller/Api
+    type: attribute
+    prefix: /api/v1/{_locale}
+    name_prefix: api_locale_
+    requirements:
+        _locale: en|ru
+
+api:
+    resource: ../src/Controller/Api
+    type: attribute
+    prefix: /api/v1
+    name_prefix: api_
+    defaults:
+        _locale: en

@@ -1,0 +1,12 @@
+services:
+  Gedmo\Translatable\TranslatableListener:
+    tags:
+      - { name: doctrine.event_listener, event: 'postLoad' }
+      - { name: doctrine.event_listener, event: 'postPersist' }
+      - { name: doctrine.event_listener, event: 'preFlush' }
+      - { name: doctrine.event_listener, event: 'onFlush' }
+      - { name: doctrine.event_listener, event: 'loadClassMetadata' }
+    calls:
+      - [ setAnnotationReader, [ "@annotation_reader" ] ]
+      - [ setDefaultLocale, [ "%kernel.default_locale%" ] ]
+      - [ setTranslationFallback, [ true ] ]
