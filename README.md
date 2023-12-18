@@ -1,5 +1,4 @@
 # Library REST sample
-
 Пример кода, бибилиотека книг с взамодействием по API.
 
 ## Задание
@@ -53,7 +52,8 @@
 ```
 
 ## Комментарии
-- Для мультиязычности используется [doctrine-extensions/DoctrineExtensions](https://github.com/doctrine-extensions/DoctrineExtensions)
+- Для мультиязычности
+  используется [doctrine-extensions/DoctrineExtensions](https://github.com/doctrine-extensions/DoctrineExtensions)
 - Для описания API используется [zircote/swagger-php](https://github.com/zircote/swagger-php)
 
 ## Структура БД
@@ -85,6 +85,7 @@
 ```shell
 docker exec -it library-php ./vendor/bin/openapi src -o openapi.yaml
 ```
+Актуальную версию можно посмотреть [здесь](./docs/openapi.yaml).
 
 ## Тестирование
 Запуск тестов:

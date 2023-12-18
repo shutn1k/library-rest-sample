@@ -1,0 +1,266 @@
+openapi: 3.0.0
+info:
+  title: 'Library REST API'
+  description: 'Library REST API sample'
+  contact:
+    name: 'Sergey Zhuchkov'
+    email: z@sergey.moscow
+  version: '1.0'
+servers:
+  -
+    url: 'https://library-sample.sergey.moscow'
+    description: 'Test API server'
+paths:
+  '/api/v1/{locale}/author/':
+    post:
+      tags:
+        - author
+      description: 'Create author'
+      operationId: authorCreate
+      parameters:
+        -
+          name: locale
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      requestBody:
+        $ref: '#/components/requestBodies/AuthorCreate'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: 'Bad request'
+        '409':
+          description: 'Entity already exists'
+        '500':
+          description: 'Server error'
+  '/api/v1/{locale}/author/{id}':
+    get:
+      tags:
+        - author
+      description: 'Get author by id'
+      operationId: authorReadItem
+      parameters:
+        -
+          name: locale
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: AOK
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - { $ref: '#/components/schemas/ApiResponse' }
+                  - { properties: { data: { required: [author], properties: { author: { $ref: '#/components/schemas/Author' } }, type: object } }, type: object }
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Server error'
+  '/api/v1/{locale}/book/':
+    get:
+      tags:
+        - book
+      description: 'Search book by params'
+      operationId: bookList
+      parameters:
+        -
+          name: locale
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+        -
+          name: bt
+          in: query
+          description: 'Book title in locale'
+          required: false
+          schema:
+            type: string
+            maxLength: 255
+            minLength: 3
+      responses:
+        '200':
+          description: AOK
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - { $ref: '#/components/schemas/ApiResponse' }
+                  - { properties: { data: { required: [books], properties: { books: { type: array, items: { $ref: '#/components/schemas/Book' } } }, type: object } }, type: object }
+        '500':
+          description: 'Server error'
+    post:
+      tags:
+        - book
+      description: 'Create book'
+      operationId: bookCreate
+      parameters:
+        -
+          name: locale
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+      requestBody:
+        $ref: '#/components/requestBodies/BookCreate'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: 'Bad request'
+        '409':
+          description: 'Entity already exists'
+        '500':
+          description: 'Server error'
+  '/api/v1/{locale}/book/{id}':
+    get:
+      tags:
+        - book
+      description: 'Get book by id'
+      operationId: bookReadItem
+      parameters:
+        -
+          name: locale
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/Locale'
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: AOK
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - { $ref: '#/components/schemas/ApiResponse' }
+                  - { properties: { data: { required: [book], properties: { book: { $ref: '#/components/schemas/Book' } }, type: object } }, type: object }
+        '404':
+          description: 'Not found'
+        '500':
+          description: 'Server error'
+components:
+  schemas:
+    Locale:
+      type: string
+      enum:
+        - en
+        - ru
+    Author:
+      description: 'Author entity'
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          nullable: true
+        name:
+          type: string
+          maxLength: 255
+          minLength: 3
+          nullable: false
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+          nullable: false
+      type: object
+    Book:
+      description: 'Book entity'
+      required:
+        - id
+        - title
+      properties:
+        id:
+          type: integer
+          nullable: true
+        title:
+          type: string
+          maxLength: 255
+          minLength: 3
+          nullable: false
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+          nullable: false
+      type: object
+    ApiResponse:
+      description: 'Default API response'
+      required:
+        - code
+        - message
+        - data
+      properties:
+        code:
+          type: integer
+          nullable: false
+        message:
+          type: string
+          nullable: false
+        data:
+          nullable: true
+      type: object
+  requestBodies:
+    AuthorCreate:
+      content:
+        application/json:
+          schema:
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                maxLength: 255
+                minLength: 3
+              books_ids:
+                type: array
+                items:
+                  type: integer
+                  minimum: 1
+            type: object
+    BookCreate:
+      content:
+        application/json:
+          schema:
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                maxLength: 255
+                minLength: 3
+              author_ids:
+                type: array
+                items:
+                  type: integer
+                  minimum: 1
+            type: object
+tags:
+  -
+    name: book
+    description: 'Book endpoint'
+  -
+    name: author
+    description: 'Author endpoint'
