@@ -8,7 +8,7 @@ info:
   version: '1.0'
 servers:
   -
-    url: 'https://library-sample.sergey.moscow'
+    url: 'https://library-test.sergey.moscow'
     description: 'Test API server'
 paths:
   '/api/v1/{locale}/author/':

@@ -11,7 +11,7 @@ use OpenApi\Attributes as OA;
     contact: new OA\Contact(name: 'Sergey Zhuchkov', email: 'z@sergey.moscow')
 )]
 #[OA\Server(
-    url: 'https://library-sample.sergey.moscow',
+    url: 'https://library-test.sergey.moscow',
     description: 'Test API server'
 )]
 #[OA\Tag('book', description: 'Book endpoint')]
